@@ -5,7 +5,10 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
 ## Directory Structure
 
 - 📁 part-00
-  - 📄 0.4-new-note-diagram.md
-  - 📄 0.5-single-page-app-diagram.md
-  - 📄 0.6-new-note-in-spa-diagram.md
+    - 📄 0.4-new-note-diagram.md
+    - 📄 0.5-single-page-app-diagram.md
+    - 📄 0.6-new-note-in-spa-diagram.md
+
+- 📁 part-01
+    - 📁 courseinfo
 
