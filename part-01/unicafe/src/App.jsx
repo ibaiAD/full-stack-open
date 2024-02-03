@@ -21,15 +21,23 @@ const PositivePercentage = ({ good, neutral, bad }) => {
 };
 
 const Statistics = ({ good, neutral, bad }) => {
+  const total = good + neutral + bad;
+
   return (
     <section>
       <h2>statistics</h2>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <Total total={good + neutral + bad} />
-      <Average good={good} neutral={neutral} bad={bad} />
-      <PositivePercentage good={good} neutral={neutral} bad={bad} />
+      {total === 0 ? (
+        <p>No feedback given</p>
+      ) : (
+        <>
+          <p>good {good}</p>
+          <p>neutral {neutral}</p>
+          <p>bad {bad}</p>
+          <Total total={total} />
+          <Average good={good} neutral={neutral} bad={bad} />
+          <PositivePercentage good={good} neutral={neutral} bad={bad} />
+        </>
+      )}
     </section>
   );
 };
