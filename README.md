@@ -11,5 +11,8 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
   - 📄 0.6-new-note-in-spa-diagram.md
 
 - 📁 part-01
+
   - 📁 courseinfo
   - 📁 unicafe
+  - 📁 anecdotes
+
