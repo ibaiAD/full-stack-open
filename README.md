@@ -16,3 +16,7 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
   - 📁 unicafe
   - 📁 anecdotes
 
+- 📁 part-02
+
+  - 📁 courseinfo
+
