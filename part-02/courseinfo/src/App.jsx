@@ -5,13 +5,22 @@ const Course = ({ course }) => {
     <div>
       <Header course={name} />
       <Content parts={parts} />
+      <Total parts={parts} />
     </div>
   );
 };
 
 const Header = ({ course }) => <h1>{course}</h1>;
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>;
+const Total = ({ parts }) => {
+  const totalExercises = parts.reduce((acc, curr) => acc + curr.exercises, 0);
+
+  return (
+    <p>
+      <strong>total of {totalExercises}</strong>
+    </p>
+  );
+};
 
 const Part = ({ part }) => (
   <p>
