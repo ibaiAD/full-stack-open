@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState({
+  const [notification, setNotification] = useState({
     message: null,
     type: null,
   });
@@ -21,9 +21,9 @@ const App = () => {
   }, []);
 
   const popNotification = (message, type) => {
-    setNotificationMessage({ message, type });
+    setNotification({ message, type });
     setTimeout(() => {
-      setNotificationMessage({ message: null, type: null });
+      setNotification({ message: null, type: null });
     }, 3000);
   };
 
@@ -47,15 +47,23 @@ const App = () => {
       number: newNumber,
     };
 
-    personService.update(id, updatedPerson).then((returnedPerson) => {
-      setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
-      popNotification(
-        `Updated ${returnedPerson.name} number to ${returnedPerson.number}`,
-        "success",
-      );
-      setNewName("");
-      setNewNumber("");
-    });
+    personService
+      .update(id, updatedPerson)
+      .then((returnedPerson) => {
+        setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
+        popNotification(
+          `Updated ${returnedPerson.name} number to ${returnedPerson.number}`,
+          "success",
+        );
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch(() => {
+        popNotification(
+          `Information of ${name} has already been removed from server`,
+          "error",
+        );
+      });
   };
 
   const handleSubmit = (e) => {
@@ -79,10 +87,18 @@ const App = () => {
   const handleDelete = ({ name, id }) => {
     if (!window.confirm(`Delete ${name} ?`)) return;
 
-    personService.remove(id).then((personDeleted) => {
-      const updatedPersons = persons.filter((p) => p.id !== personDeleted.id);
-      setPersons(updatedPersons);
-    });
+    personService
+      .remove(id)
+      .then((personDeleted) => {
+        const updatedPersons = persons.filter((p) => p.id !== personDeleted.id);
+        setPersons(updatedPersons);
+      })
+      .catch(() => {
+        popNotification(
+          `Information of ${name} has already been removed from server`,
+          "error",
+        );
+      });
   };
 
   const handleFilter = (e) => {
@@ -99,10 +115,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification
-        message={notificationMessage.message}
-        type={notificationMessage.type}
-      />
+      <Notification message={notification.message} type={notification.type} />
       <Filter search={search} handleFilter={handleFilter} />
 
       <h3>Add a new</h3>
