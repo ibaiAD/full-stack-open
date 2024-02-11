@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Filter } from "./components/Filter";
 import { PersonForm } from "./components/PersonForm";
 import { Persons } from "./components/Persons";
+import { Notification } from "./components/Notification";
 import personService from "./services/persons.js";
 
 const App = () => {
@@ -10,10 +11,21 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+  const [notificationMessage, setNotificationMessage] = useState({
+    message: null,
+    type: null,
+  });
 
   useEffect(() => {
     personService.getAll().then((initialPersons) => setPersons(initialPersons));
   }, []);
+
+  const popNotification = (message, type) => {
+    setNotificationMessage({ message, type });
+    setTimeout(() => {
+      setNotificationMessage({ message: null, type: null });
+    }, 3000);
+  };
 
   const addPerson = () => {
     const newPerson = {
@@ -23,6 +35,7 @@ const App = () => {
 
     personService.create(newPerson).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+      popNotification(`Added ${returnedPerson.name}`, "success");
       setNewName("");
       setNewNumber("");
     });
@@ -34,11 +47,15 @@ const App = () => {
       number: newNumber,
     };
 
-    personService
-      .update(id, updatedPerson)
-      .then((returnedPerson) =>
-        setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson))),
+    personService.update(id, updatedPerson).then((returnedPerson) => {
+      setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
+      popNotification(
+        `Updated ${returnedPerson.name} number to ${returnedPerson.number}`,
+        "success",
       );
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleSubmit = (e) => {
@@ -82,6 +99,10 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification
+        message={notificationMessage.message}
+        type={notificationMessage.type}
+      />
       <Filter search={search} handleFilter={handleFilter} />
 
       <h3>Add a new</h3>
