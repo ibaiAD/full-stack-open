@@ -27,7 +27,11 @@ function App() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </form>
-      <DisplayInfo search={search} countriesToShow={countriesToShow} />
+      <DisplayInfo
+        search={search}
+        setSearch={setSearch}
+        countriesToShow={countriesToShow}
+      />
     </div>
   );
 }

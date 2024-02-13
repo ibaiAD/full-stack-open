@@ -1,13 +1,15 @@
 import CountryInfo from "./CountryInfo";
 import CountryList from "./CountryList";
 
-const DisplayInfo = ({ search, countriesToShow }) => {
+const DisplayInfo = ({ search, setSearch, countriesToShow }) => {
   if (!search) return;
   if (countriesToShow.length > 10) {
     return <p>Too many matches, specify another filter</p>;
   }
   if (countriesToShow.length > 1) {
-    return <CountryList countriesToShow={countriesToShow} />;
+    return (
+      <CountryList countriesToShow={countriesToShow} setSearch={setSearch} />
+    );
   }
   if (countriesToShow.length === 0) {
     return <p>No matches</p>;
