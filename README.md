@@ -12,11 +12,12 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
 
 - 📁 part-01
 
+  - 📁 anecdotes
   - 📁 courseinfo
   - 📁 unicafe
-  - 📁 anecdotes
 
 - 📁 part-02
 
+  - 📁 countries
   - 📁 courseinfo
   - 📁 phonebook
