@@ -54,18 +54,31 @@ app.delete("/api/persons/:id", (request, response) => {
 });
 
 app.post("/api/persons", (request, response) => {
-  const { body } = request;
+  const {
+    body: { name, number },
+  } = request;
+
+  if (!(name && number)) {
+    return response.status(400).json({ error: "required parameter missing" });
+  }
+
+  if (
+    persons.some((person) => person.name.toLowerCase() === name.toLowerCase())
+  ) {
+    return response.status(409).json({ error: "name must be unique" });
+  }
+
   const randomId = Math.floor(Math.random() * (1000 - 1) + 1);
 
   const newPerson = {
     id: randomId,
-    name: body.name,
-    number: body.number,
+    name: name,
+    number: number,
   };
 
   persons = persons.concat(newPerson);
 
-  response.json(newPerson);
+  response.status(201).json(newPerson);
 });
 
 const PORT = 3001;
