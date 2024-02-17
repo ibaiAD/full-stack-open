@@ -11,7 +11,8 @@
   "author": "Ibai Azcona Diez",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",
