@@ -89,8 +89,8 @@ const App = () => {
 
     personService
       .remove(id)
-      .then((personDeleted) => {
-        const updatedPersons = persons.filter((p) => p.id !== personDeleted.id);
+      .then(() => {
+        const updatedPersons = persons.filter((p) => p.id !== id);
         setPersons(updatedPersons);
       })
       .catch(() => {

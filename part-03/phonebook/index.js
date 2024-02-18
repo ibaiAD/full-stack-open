@@ -1,8 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 
 const app = express();
 
+app.use(cors());
+app.use(express.static("dist"));
 app.use(express.json());
 morgan.token("request-body", (request) => JSON.stringify(request.body));
 app.use(morgan("tiny", { skip: (request) => request.method === "POST" }));
