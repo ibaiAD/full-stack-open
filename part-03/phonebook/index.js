@@ -77,23 +77,14 @@ app.post("/api/persons", postLogger, (request, response) => {
     return response.status(400).json({ error: "required parameter missing" });
   }
 
-  if (
-    persons.some((person) => person.name.toLowerCase() === name.toLowerCase())
-  ) {
-    return response.status(409).json({ error: "name must be unique" });
-  }
-
-  const randomId = Math.floor(Math.random() * (1000 - 1) + 1);
-
-  const newPerson = {
-    id: randomId,
+  const person = new Person({
     name: name,
     number: number,
-  };
+  });
 
-  persons = persons.concat(newPerson);
-
-  response.status(201).json(newPerson);
+  person.save().then((savedPerson) => {
+    response.status(201).json(savedPerson);
+  });
 });
 
 const PORT = process.env.PORT || 3001;
