@@ -1,3 +1,4 @@
 progress.txt
 course/
 node_modules/
+.env
