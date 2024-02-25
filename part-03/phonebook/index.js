@@ -57,15 +57,12 @@ app.get("/api/persons/:id", (request, response) => {
   response.json(person);
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
     .then(() => {
       response.status(204).end();
     })
-    .catch((error) => {
-      console.error(error);
-      return response.status(400).send({ error: "malformatted id" });
-    });
+    .catch((error) => next(error));
 });
 
 const postLogger = morgan(
@@ -90,6 +87,24 @@ app.post("/api/persons", postLogger, (request, response) => {
     response.status(201).json(savedPerson);
   });
 });
+
+const unknownEndpoint = (_, response) => {
+  response.status(404).send({ error: "unknown endpoint" });
+};
+
+app.use(unknownEndpoint);
+
+const errorHandler = (error, _, response, next) => {
+  console.error(error.message);
+
+  if (error.name === "CastError") {
+    return response.status(400).send({ error: "malformatted id" });
+  }
+
+  next(error);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
