@@ -5,7 +5,7 @@ export const Persons = ({ personsToShow, handleDelete }) => {
     <ul>
       {personsToShow.map((person) => (
         <PersonDetails
-          key={person.name}
+          key={person.id}
           person={person}
           handleDelete={handleDelete}
         />
