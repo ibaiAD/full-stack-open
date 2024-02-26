@@ -33,12 +33,17 @@ const App = () => {
       number: newNumber,
     };
 
-    personService.create(newPerson).then((returnedPerson) => {
-      setPersons(persons.concat(returnedPerson));
-      popNotification(`Added ${returnedPerson.name}`, "success");
-      setNewName("");
-      setNewNumber("");
-    });
+    personService
+      .create(newPerson)
+      .then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson));
+        popNotification(`Added ${returnedPerson.name}`, "success");
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        popNotification(error.response.data.error, "error");
+      });
   };
 
   const updatePerson = ({ id, name }) => {
@@ -50,6 +55,8 @@ const App = () => {
     personService
       .update(id, updatedPerson)
       .then((returnedPerson) => {
+        if (!returnedPerson) throw new Error("Already removed from server");
+
         setPersons(persons.map((p) => (p.id !== id ? p : returnedPerson)));
         popNotification(
           `Updated ${returnedPerson.name} number to ${returnedPerson.number}`,

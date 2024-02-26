@@ -50,23 +50,19 @@ const postLogger = morgan(
   ":method :url :status :res[content-length] - :response-time ms :request-body",
 );
 
-app.post("/api/persons", postLogger, (request, response) => {
+app.post("/api/persons", postLogger, (request, response, next) => {
   const {
     body: { name, number },
   } = request;
 
-  if (!(name && number)) {
-    return response.status(400).json({ error: "required parameter missing" });
-  }
+  const person = new Person({ name, number });
 
-  const person = new Person({
-    name: name,
-    number: number,
-  });
-
-  person.save().then((savedPerson) => {
-    response.status(201).json(savedPerson);
-  });
+  person
+    .save()
+    .then((savedPerson) => {
+      response.status(201).json(savedPerson);
+    })
+    .catch((error) => next(error));
 });
 
 app.put("/api/persons/:id", (request, response, next) => {
@@ -75,9 +71,11 @@ app.put("/api/persons/:id", (request, response, next) => {
     body: { name, number },
   } = request;
 
-  const person = { name, number };
-
-  Person.findByIdAndUpdate(id, person, { new: true })
+  Person.findByIdAndUpdate(
+    id,
+    { name, number },
+    { new: true, runValidators: true, context: "query" },
+  )
     .then((updatedPerson) => {
       return response.json(updatedPerson);
     })
@@ -95,6 +93,10 @@ const errorHandler = (error, _, response, next) => {
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
+  }
+
+  if (error.name === "ValidationError") {
+    return response.status(400).send({ error: error.message });
   }
 
   next(error);
