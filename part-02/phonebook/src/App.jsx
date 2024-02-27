@@ -65,11 +65,15 @@ const App = () => {
         setNewName("");
         setNewNumber("");
       })
-      .catch(() => {
-        popNotification(
-          `Information of ${name} has already been removed from server`,
-          "error",
-        );
+      .catch((error) => {
+        if (error.name === "AxiosError") {
+          popNotification(error.response.data.error, "error");
+        } else {
+          popNotification(
+            `Information of ${name} has already been removed from server`,
+            "error",
+          );
+        }
       });
   };
 
