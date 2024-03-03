@@ -1,3 +1,5 @@
+const collection = require('lodash/collection')
+
 const dummy = (blogs) => {
   return 1
 }
@@ -13,8 +15,19 @@ const favoriteBlog = (blogs) => {
   return blogs.find(blog => blog.likes === maxLikes)
 }
 
+const mostBlogs = (blogs) => {
+  const authorBlogs = collection.countBy(blogs, blog => blog.author)
+  const maxBlogs = Math.max(...Object.values(authorBlogs))
+
+  return {
+    author: Object.keys(authorBlogs).find(author => authorBlogs[author] === maxBlogs),
+    blogs: maxBlogs
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
