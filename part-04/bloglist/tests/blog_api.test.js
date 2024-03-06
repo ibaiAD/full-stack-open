@@ -53,6 +53,20 @@ test('a valid blog can be added', async () => {
   assert(titles.includes(newBlog.title))
 })
 
+test('when adding a blog, if likes prop is missing it will default to 0', async () => {
+  const newBlog = {
+    title: "test4",
+    author: "Test Tester",
+    url: "http://someurl.com/four",
+  }
+
+  const response = await api
+    .post('/api/blogs')
+    .send(newBlog)
+
+  assert.strictEqual(response.body.likes, 0)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
