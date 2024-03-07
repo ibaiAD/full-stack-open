@@ -79,6 +79,9 @@ describe('status 400 when required parameters missing', () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
   })
 
   test('url', async () => {
@@ -92,6 +95,9 @@ describe('status 400 when required parameters missing', () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
   })
 
   test('title and url', async () => {
@@ -104,6 +110,48 @@ describe('status 400 when required parameters missing', () => {
       .post('/api/blogs')
       .send(newBlog)
       .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+  })
+})
+
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
+
+    const titles = blogsAtEnd.map(b => b.title)
+    assert(!titles.includes(blogToDelete.title))
+  })
+
+  test('succeeds with status code 204 if id non exists', async () => {
+    const nonExistingId = await helper.nonExistingId()
+
+    await api
+      .delete(`/api/blogs/${nonExistingId}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+  })
+
+  test('fails with status code 400 if id is malformatted', async () => {
+    const nonExistingId = '123'
+
+    await api
+      .delete(`/api/blogs/${nonExistingId}`)
+      .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
   })
 })
 
