@@ -8,6 +8,12 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const { body } = request
+  const { title, url } = body
+
+  if (!(title && url)) {
+    return response.status(400).json({ error: 'required parameter missing' })
+  }
+
   const blog = new Blog({
     ...body,
     likes: body.likes || 0

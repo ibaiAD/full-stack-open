@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test')
+const { describe, test, after, beforeEach } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
 const mongoose = require('mongoose')
@@ -65,6 +65,46 @@ test('when adding a blog, if likes prop is missing it will default to 0', async 
     .send(newBlog)
 
   assert.strictEqual(response.body.likes, 0)
+})
+
+describe('status 400 when required parameters missing', () => {
+  test('title', async () => {
+    const newBlog = {
+      author: "Test Tester",
+      url: "http://someurl.com/five",
+      likes: 5
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+
+  test('url', async () => {
+    const newBlog = {
+      title: "test6",
+      author: "Test Tester",
+      likes: 6
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
+
+  test('title and url', async () => {
+    const newBlog = {
+      author: "Test Tester",
+      likes: 7
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
+  })
 })
 
 after(async () => {
