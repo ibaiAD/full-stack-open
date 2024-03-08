@@ -32,4 +32,32 @@ blogsRouter.delete('/:id', async (request, response, next) => {
   }
 })
 
+
+blogsRouter.put('/:id', async (request, response, next) => {
+  const { body, params: { id } } = request
+  const { title, author, url, likes } = body
+
+  if (!(title && url)) {
+    return response.status(400).json({ error: 'required parameter missing' })
+  }
+
+  const blog = {
+    title,
+    author,
+    url,
+    likes: likes || 0
+  }
+
+  try {
+    const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true })
+
+    if (!updatedBlog) {
+      return response.status(404).end()
+    }
+    response.json(updatedBlog)
+  } catch (error) {
+    next(error)
+  }
+})
+
 module.exports = blogsRouter
