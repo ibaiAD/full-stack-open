@@ -16,6 +16,24 @@ const errorHandler = (error, _, response, next) => {
   next(error)
 }
 
+const tokenExtractor = (request, _, next) => {
+  const authorization = request.get('authorization')
+
+  if (authorization && authorization.startsWith('Bearer ')) {
+    request.token = authorization.replace('Bearer ', '')
+    return next()
+  }
+
+  request.token = null
+  next()
+}
+
+const unknownEndpoint = (_, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
 module.exports = {
   errorHandler,
+  tokenExtractor,
+  unknownEndpoint,
 }
