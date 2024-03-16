@@ -1,7 +1,6 @@
 const blogsRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
+const middleware = require('../utils/middleware')
 const Blog = require('../models/blog')
-const User = require('../models/user')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -10,27 +9,13 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response, next) => {
-  let decodedToken
-
-  try {
-    decodedToken = jwt.verify(request.token, process.env.SECRET)
-  } catch (error) {
-    return next(error)
-  }
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
-
-  const { body } = request
+blogsRouter.post('/', middleware.userExtractor, async (request, response, next) => {
+  const { body, user } = request
   const { title, url } = body
 
   if (!(title && url)) {
     return response.status(400).json({ error: 'required parameter missing' })
   }
-
-  const user = await User.findById(decodedToken.id)
 
   const blog = new Blog({
     ...body,
@@ -45,18 +30,8 @@ blogsRouter.post('/', async (request, response, next) => {
   response.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
-  let decodedToken
-
-  try {
-    decodedToken = jwt.verify(request.token, process.env.SECRET)
-  } catch (error) {
-    return next(error)
-  }
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' })
-  }
+blogsRouter.delete('/:id', middleware.userExtractor, async (request, response, next) => {
+  const { user } = request
 
   try {
     const blog = await Blog.findById(request.params.id)
@@ -65,7 +40,7 @@ blogsRouter.delete('/:id', async (request, response, next) => {
       return response.status(204).end()
     }
 
-    if (blog.user.toString() !== decodedToken.id.toString()) {
+    if (blog.user.toString() !== user.id.toString()) {
       return response.status(403).json({ error: 'invalid user' })
     }
 
