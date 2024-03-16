@@ -30,7 +30,7 @@ const tokenExtractor = (request, _, next) => {
   next()
 }
 
-const userExtractor = async (request, _, next) => {
+const userExtractor = async (request, response, next) => {
   const authorization = request.get('authorization')
   let token = null
 
