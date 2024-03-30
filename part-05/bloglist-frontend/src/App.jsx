@@ -89,6 +89,21 @@ const App = () => {
     )
   }
 
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.remove(id)
+      setBlogs(blogs.filter(b => b.id !== id))
+    } catch (exception) {
+      console.error(exception)
+      const errorMessage = exception?.response?.data?.error
+      setNotification({ message: errorMessage || 'error', type: 'error' })
+      setTimeout(() => {
+        setNotification({ message: null, type: null })
+      }, 3000);
+
+    }
+  }
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     blogService.setToken(null)
@@ -145,7 +160,13 @@ const App = () => {
             <BlogForm createBlog={addBlog} />
           </Togglable>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              updateBlog={updateBlog}
+              user={user}
+              deleteBlog={deleteBlog}
+            />
           )}
         </div>
       }
