@@ -54,7 +54,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response, n
 
 blogsRouter.put('/:id', async (request, response, next) => {
   const { body, params: { id } } = request
-  const { title, author, url, likes } = body
+  const { title, author, url, likes, user } = body
 
   if (!(title && url)) {
     return response.status(400).json({ error: 'required parameter missing' })
@@ -64,7 +64,8 @@ blogsRouter.put('/:id', async (request, response, next) => {
     title,
     author,
     url,
-    likes: likes || 0
+    likes: likes || 0,
+    user: user
   }
 
   try {
