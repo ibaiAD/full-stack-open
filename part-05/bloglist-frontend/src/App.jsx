@@ -14,7 +14,7 @@ const App = () => {
   const [notification, setNotification] = useState({
     message: null,
     type: null,
-  });
+  })
 
   const blogFormRef = useRef()
 
@@ -55,7 +55,7 @@ const App = () => {
       setNotification({ message: errorMessage || 'error', type: 'error' })
       setTimeout(() => {
         setNotification({ message: null, type: null })
-      }, 3000);
+      }, 3000)
     }
   }
 
@@ -69,14 +69,14 @@ const App = () => {
       setNotification({ message: succesMessage, type: 'success' })
       setTimeout(() => {
         setNotification({ message: null, type: null })
-      }, 3000);
+      }, 3000)
     } catch (exception) {
       console.error(exception)
       const errorMessage = exception?.response?.data?.error
       setNotification({ message: errorMessage || 'error', type: 'error' })
       setTimeout(() => {
         setNotification({ message: null, type: null })
-      }, 3000);
+      }, 3000)
     }
   }
 
@@ -99,7 +99,7 @@ const App = () => {
       setNotification({ message: errorMessage || 'error', type: 'error' })
       setTimeout(() => {
         setNotification({ message: null, type: null })
-      }, 3000);
+      }, 3000)
 
     }
   }
