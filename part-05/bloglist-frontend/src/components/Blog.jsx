@@ -31,12 +31,12 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   return (
     <div style={blogStyle}>
-      <section>
+      <section className='mainContent'>
         {blog.title} {blog.author}
         &nbsp;
         <button onClick={() => setVisible(!visible)}>view</button>
       </section>
-      <section style={showWhenVisible}>
+      <section style={showWhenVisible} className='togglableContent'>
         <article>{blog.url}</article>
         <article>
           likes {blog.likes}
@@ -44,7 +44,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
           <button onClick={handleLike}>like</button>
         </article>
         <article>{blog.user?.name}</article>
-        {user.name === blog.user?.name &&
+        {user?.name === blog.user?.name &&
           <button
             style={{ backgroundColor: '#4286f6' }}
             onClick={handleRemove}>
