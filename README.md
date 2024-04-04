@@ -33,3 +33,4 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
 - 📁 part-05
 
   - 📁 bloglist-frontend
+  - 📁 e2e
