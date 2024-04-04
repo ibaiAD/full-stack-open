@@ -25,5 +25,5 @@ export const Notification = ({ message, type }) => {
         ? { ...generalStyle, ...successStyle }
         : { ...generalStyle }
 
-  return <div style={style}>{message}</div>
+  return <div style={style} className={type}>{message}</div>
 }
