@@ -92,6 +92,17 @@ describe('Blog app', () => {
           await secondBlogElement.getByRole('button', { name: 'like' }).click()
           await expect(secondBlogElement).toContainText('likes 1')
         })
+
+        test('the user who added the blog can delete it', async ({ page }) => {
+          const secondBlog = page.getByText('Test 2 Playwright')
+          await secondBlog.getByRole('button', { name: 'view' }).click()
+          const secondBlogElement = secondBlog.locator('..')
+
+          page.on('dialog', dialog => dialog.accept())
+          await secondBlogElement.getByRole('button', { name: 'remove' }).click()
+          await secondBlogElement.waitFor({ state: 'detached' })
+          await expect(page.getByText('Test 2 Playwright')).not.toBeVisible()
+        })
       })
     })
   })
