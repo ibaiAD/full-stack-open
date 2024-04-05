@@ -63,6 +63,36 @@ describe('Blog app', () => {
         await expect(successDiv).toHaveCSS('color', 'rgb(0, 128, 0)')
         await expect(page.getByText(`${content.title} ${content.author}`)).toBeVisible()
       })
+
+      describe('and several blogs exist', () => {
+        beforeEach(async ({ page }) => {
+          await createBlog(page, {
+            title: 'Test 1',
+            author: 'Playwright',
+            url: 'https://test-one.com'
+          })
+          await createBlog(page, {
+            title: 'Test 2',
+            author: 'Playwright',
+            url: 'https://test-two.com'
+          })
+          await createBlog(page, {
+            title: 'Test 3',
+            author: 'Playwright',
+            url: 'https://test-three.com'
+          })
+        })
+
+        test('likes can be edited', async ({ page }) => {
+          const secondBlog = page.getByText('Test 2 Playwright')
+          await secondBlog.getByRole('button', { name: 'view' }).click()
+          const secondBlogElement = secondBlog.locator('..')
+
+          await expect(secondBlogElement).toContainText('likes 0')
+          await secondBlogElement.getByRole('button', { name: 'like' }).click()
+          await expect(secondBlogElement).toContainText('likes 1')
+        })
+      })
     })
   })
 })
