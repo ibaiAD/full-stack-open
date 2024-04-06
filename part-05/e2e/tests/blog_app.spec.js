@@ -104,6 +104,25 @@ describe('Blog app', () => {
           await expect(page.getByText('Test 2 Playwright')).not.toBeVisible()
         })
 
+        test('blogs are arranged in the order according to the likes', async ({ page }) => {
+          const secondBlogElement = page.getByText('Test 2 Playwright').locator('..')
+          await secondBlogElement.getByRole('button', { name: 'view' }).click()
+          await secondBlogElement.getByRole('button', { name: 'like' }).click()
+          await secondBlogElement.getByText('likes 1').waitFor()
+
+          const thirdBlogElement = page.getByText('Test 3 Playwright').locator('..')
+          await thirdBlogElement.getByRole('button', { name: 'view' }).click()
+          await thirdBlogElement.getByRole('button', { name: 'like' }).click()
+          await thirdBlogElement.getByText('likes 1').waitFor()
+          await thirdBlogElement.getByRole('button', { name: 'like' }).click()
+          await thirdBlogElement.getByText('likes 2').waitFor()
+
+          const blogs = await page.getByText(/^Test \d Playwright/).all()
+          await expect(blogs[0]).toContainText('Test 3 Playwright')
+          await expect(blogs[1]).toContainText('Test 2 Playwright')
+          await expect(blogs[2]).toContainText('Test 1 Playwright')
+        })
+
         describe('and several users exist', () => {
           beforeEach(async ({ request }) => {
             await request.post('/api/users', {
