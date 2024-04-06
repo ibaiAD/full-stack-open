@@ -103,6 +103,32 @@ describe('Blog app', () => {
           await secondBlogElement.waitFor({ state: 'detached' })
           await expect(page.getByText('Test 2 Playwright')).not.toBeVisible()
         })
+
+        describe('and several users exist', () => {
+          beforeEach(async ({ request }) => {
+            await request.post('/api/users', {
+              data: {
+                name: 'John Doe',
+                username: 'jdoe',
+                password: 'se7en'
+              }
+            })
+          })
+
+          test('only the user who added the blog sees the remove button', async ({ page }) => {
+            const secondBlog = page.getByText('Test 2 Playwright')
+            await secondBlog.getByRole('button', { name: 'view' }).click()
+            const secondBlogElement = secondBlog.locator('..')
+
+            await expect(secondBlogElement.getByRole('button', { name: 'remove' })).toBeVisible()
+            await page.getByRole('button', { name: 'logout' }).click()
+            await loginWith(page, 'jdoe', 'se7en')
+            await expect(page.getByText('John Doe logged in')).toBeVisible()
+
+            await secondBlog.getByRole('button', { name: 'view' }).click()
+            await expect(secondBlogElement.getByRole('button', { name: 'remove' })).not.toBeVisible()
+          })
+        })
       })
     })
   })
