@@ -34,3 +34,7 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
 
   - 📁 bloglist-frontend
   - 📁 e2e
+
+- 📁 part-06
+
+  - 📁 unicafe-redux
