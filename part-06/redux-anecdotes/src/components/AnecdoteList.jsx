@@ -19,7 +19,7 @@ const AnecdoteList = () => {
   const anecdotes = useSelector(
     ({ anecdotes, filter }) => {
       if (!filter) {
-        return anecdotes.sort((a, b) => b.votes - a.votes)
+        return [...anecdotes].sort((a, b) => b.votes - a.votes)
       }
 
       return anecdotes
