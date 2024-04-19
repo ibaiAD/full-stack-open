@@ -37,5 +37,6 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
 
 - 📁 part-06
 
-  - 📁 unicafe-redux
+  - 📁 query-anecdotes
   - 📁 redux-anecdotes
+  - 📁 unicafe-redux
