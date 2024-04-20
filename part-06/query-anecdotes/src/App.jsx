@@ -3,8 +3,10 @@ import { getAnecdotes, updateAnecdote } from './requests'
 
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
+import { useNotificationDispatch, setNotification } from './NotificationContext'
 
 const App = () => {
+  const dispatch = useNotificationDispatch()
   const queryClient = useQueryClient()
 
   const updateAnecdoteMutation = useMutation({
@@ -14,6 +16,7 @@ const App = () => {
       queryClient.setQueryData(['anecdotes'],
         anecdotes.map(a => a.id !== updatedAnecdote.id ? a : updatedAnecdote)
       )
+      setNotification(dispatch, `anecdote '${updatedAnecdote.content}' voted`)
     }
   })
 
