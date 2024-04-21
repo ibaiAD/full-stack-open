@@ -40,3 +40,7 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
   - 📁 query-anecdotes
   - 📁 redux-anecdotes
   - 📁 unicafe-redux
+
+- 📁 part-07
+
+  - 📁 routed-anecdotes
