@@ -54,32 +54,6 @@ const App = () => {
     }
   }
 
-  /*
-  const updateBlog = async (id, blogObject) => {
-    const returnedBlog = await blogService.update(id, blogObject)
-    setBlogs(
-      blogs
-        .map((b) => (b.id !== id ? b : returnedBlog))
-        .sort((a, b) => b.likes - a.likes)
-    )
-  }
-  */
-
-  /*
-  const deleteBlog = async (id) => {
-    try {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((b) => b.id !== id))
-    } catch (exception) {
-      console.error(exception)
-      const errorMessage = exception?.response?.data?.error
-      dispatch(
-        setNotification({ message: errorMessage || 'error', type: 'error' }, 3)
-      )
-    }
-  }
-  */
-
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     blogService.setToken(null)
@@ -130,7 +104,7 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm blogFormRef={blogFormRef} />
           </Togglable>
-          <BlogList />
+          <BlogList user={user} />
         </div>
       )}
     </div>
