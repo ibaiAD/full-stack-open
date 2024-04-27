@@ -44,5 +44,6 @@ Repository to upload the exercises of the [Full Stack Open course](https://fulls
 - 📁 part-07
 
   - 📁 country-hook
+  - 📁 extended-bloglist
   - 📁 routed-anecdotes
   - 📁 ultimate-hooks
