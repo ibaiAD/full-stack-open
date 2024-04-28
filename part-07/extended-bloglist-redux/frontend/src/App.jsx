@@ -1,11 +1,15 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Routes, Route, Link } from 'react-router-dom'
+
 import Togglable from './components/Togglable'
 import { Notification } from './components/Notification'
 import BlogForm from './components/BlogForm'
-import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs } from './reducers/blogReducer'
 import BlogList from './components/BlogList'
+import Users from './components/Users'
+import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser, loginUser, logoutUser } from './reducers/loginReducer'
+import { initializeUsers } from './reducers/userReducer'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -19,6 +23,7 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
     dispatch(initializeUser())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   const handleLogin = async (e) => {
@@ -62,6 +67,15 @@ const App = () => {
     </div>
   )
 
+  const BlogsView = () => (
+    <>
+      <Togglable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm blogFormRef={blogFormRef} />
+      </Togglable>
+      <BlogList />
+    </>
+  )
+
   return (
     <div>
       {!user && loginForm()}
@@ -73,10 +87,10 @@ const App = () => {
             {user.name} logged in
             <button onClick={handleLogout}>logout</button>
           </p>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm blogFormRef={blogFormRef} />
-          </Togglable>
-          <BlogList />
+          <Routes>
+            <Route path="/users" element={<Users />} />
+            <Route path="/" element={<BlogsView />} />
+          </Routes>
         </div>
       )}
     </div>
