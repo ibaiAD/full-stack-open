@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const dispatch = useDispatch()
 
   const blogStyle = {
@@ -15,6 +15,7 @@ const Blog = ({ blog, user }) => {
 
   const [visible, setVisible] = useState(false)
   const showWhenVisible = { display: visible ? '' : 'none' }
+  const user = useSelector((state) => state.login)
 
   const handleLike = async () => {
     const blogObject = {
@@ -36,7 +37,9 @@ const Blog = ({ blog, user }) => {
       <section className="mainContent">
         {blog.title} {blog.author}
         &nbsp;
-        <button onClick={() => setVisible(!visible)}>view</button>
+        <button onClick={() => setVisible(!visible)}>
+          {visible ? 'hide' : 'view'}
+        </button>
       </section>
       <section style={showWhenVisible} className="togglableContent">
         <article>{blog.url}</article>
