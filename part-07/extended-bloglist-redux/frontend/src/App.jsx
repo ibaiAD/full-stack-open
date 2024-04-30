@@ -10,6 +10,7 @@ import Users from './components/Users'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser, loginUser, logoutUser } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
+import User from './components/User'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -89,6 +90,7 @@ const App = () => {
           </p>
           <Routes>
             <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<User />} />
             <Route path="/" element={<BlogsView />} />
           </Routes>
         </div>
