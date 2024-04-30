@@ -10,7 +10,8 @@ import Users from './components/Users'
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser, loginUser, logoutUser } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
-import User from './components/User'
+import UserInfo from './components/UserInfo'
+import BlogInfo from './components/BlogInfo'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -90,7 +91,8 @@ const App = () => {
           </p>
           <Routes>
             <Route path="/users" element={<Users />} />
-            <Route path="/users/:id" element={<User />} />
+            <Route path="/users/:id" element={<UserInfo />} />
+            <Route path="/blogs/:id" element={<BlogInfo />} />
             <Route path="/" element={<BlogsView />} />
           </Routes>
         </div>

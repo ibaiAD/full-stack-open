@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-const User = () => {
+const UserInfo = () => {
   const { id } = useParams()
   const user = useSelector((state) =>
     state.users.find((user) => user.id === id)
@@ -22,4 +22,4 @@ const User = () => {
   )
 }
 
-export default User
+export default UserInfo
