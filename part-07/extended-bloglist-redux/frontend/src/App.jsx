@@ -12,6 +12,7 @@ import { initializeUser, loginUser, logoutUser } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import UserInfo from './components/UserInfo'
 import BlogInfo from './components/BlogInfo'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -83,12 +84,9 @@ const App = () => {
       {!user && loginForm()}
       {user && (
         <div>
-          <h2>blogs</h2>
+          <Navigation />
+          <h2>blog app</h2>
           <Notification />
-          <p>
-            {user.name} logged in
-            <button onClick={handleLogout}>logout</button>
-          </p>
           <Routes>
             <Route path="/users" element={<Users />} />
             <Route path="/users/:id" element={<UserInfo />} />
