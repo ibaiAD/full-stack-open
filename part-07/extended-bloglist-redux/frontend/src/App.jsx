@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import Togglable from './components/Togglable'
 import { Notification } from './components/Notification'
@@ -8,7 +8,7 @@ import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Users from './components/Users'
 import { initializeBlogs } from './reducers/blogReducer'
-import { initializeUser, loginUser, logoutUser } from './reducers/loginReducer'
+import { initializeUser, loginUser } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import UserInfo from './components/UserInfo'
 import BlogInfo from './components/BlogInfo'
@@ -34,10 +34,6 @@ const App = () => {
     dispatch(loginUser({ username, password }))
     setUsername('')
     setPassword('')
-  }
-
-  const handleLogout = () => {
-    dispatch(logoutUser())
   }
 
   const loginForm = () => (

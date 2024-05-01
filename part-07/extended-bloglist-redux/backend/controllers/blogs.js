@@ -1,9 +1,12 @@
 const blogsRouter = require('express').Router()
 const middleware = require('../utils/middleware')
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 
-blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+blogsRouter.get('/', async (_, response) => {
+  const blogs = await Blog.find({})
+    .populate('user', { username: 1, name: 1 })
+    .populate('comments', { content: 1 })
 
   response.json(blogs)
 })
@@ -82,12 +85,44 @@ blogsRouter.put('/:id', async (request, response, next) => {
   try {
     const updatedBlog = await Blog.findByIdAndUpdate(id, blog, {
       new: true,
-    }).populate('user', { username: 1, name: 1 })
+    })
+      .populate('user', { username: 1, name: 1 })
+      .populate('comments', { content: 1 })
 
     if (!updatedBlog) {
       return response.status(404).end()
     }
     response.json(updatedBlog)
+  } catch (error) {
+    next(error)
+  }
+})
+
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  const { body, params } = request
+
+  try {
+    const blog = await Blog.findById(params.id)
+
+    if (!body.content) {
+      return response.status(400).json({ error: 'required parameter missing' })
+    }
+
+    if (!blog) {
+      return response.status(404).end()
+    }
+
+    const comment = new Comment({
+      content: body.content,
+      blog: params.id,
+    })
+
+    const savedComment = await comment.save()
+
+    blog.comments = blog.comments.concat(savedComment.id)
+    await blog.save()
+
+    response.status(201).json(comment)
   } catch (error) {
     next(error)
   }
