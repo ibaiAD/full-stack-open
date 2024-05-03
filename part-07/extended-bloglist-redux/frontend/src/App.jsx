@@ -1,24 +1,23 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Routes, Route } from 'react-router-dom'
+import { Box, Container, Typography } from '@mui/material'
 
 import Togglable from './components/Togglable'
-import { Notification } from './components/Notification'
+import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import BlogList from './components/BlogList'
 import Users from './components/Users'
 import { initializeBlogs } from './reducers/blogReducer'
-import { initializeUser, loginUser } from './reducers/loginReducer'
+import { initializeUser } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import UserInfo from './components/UserInfo'
 import BlogInfo from './components/BlogInfo'
 import Navigation from './components/Navigation'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const user = useSelector((state) => state.login)
-
   const dispatch = useDispatch()
 
   const blogFormRef = useRef()
@@ -28,43 +27,6 @@ const App = () => {
     dispatch(initializeUser())
     dispatch(initializeUsers())
   }, [dispatch])
-
-  const handleLogin = async (e) => {
-    e.preventDefault()
-    dispatch(loginUser({ username, password }))
-    setUsername('')
-    setPassword('')
-  }
-
-  const loginForm = () => (
-    <div>
-      <h2>log in to application</h2>
-      <Notification />
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            data-testid="username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            data-testid="password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  )
 
   const BlogsView = () => (
     <>
@@ -76,12 +38,14 @@ const App = () => {
   )
 
   return (
-    <div>
-      {!user && loginForm()}
+    <Container maxWidth="md" sx={{ minHeight: '100vh' }}>
+      {!user && <LoginForm />}
       {user && (
-        <div>
+        <Box>
           <Navigation />
-          <h2>blog app</h2>
+          <Typography variant="h3" component="h2" sx={{ mt: 1, mb: 2 }}>
+            Blog app
+          </Typography>
           <Notification />
           <Routes>
             <Route path="/users" element={<Users />} />
@@ -89,9 +53,9 @@ const App = () => {
             <Route path="/blogs/:id" element={<BlogInfo />} />
             <Route path="/" element={<BlogsView />} />
           </Routes>
-        </div>
+        </Box>
       )}
-    </div>
+    </Container>
   )
 }
 

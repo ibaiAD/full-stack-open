@@ -1,6 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { createComment } from '../reducers/blogReducer'
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material'
 
 const BlogComments = () => {
   const dispatch = useDispatch()
@@ -17,18 +27,28 @@ const BlogComments = () => {
   }
 
   return (
-    <>
-      <h3>comments</h3>
+    <Box sx={{ my: 2 }}>
+      <Typography component="h4" variant="h5">
+        comments
+      </Typography>
+      {blog?.comments?.length > 0 && (
+        <Paper variant="outlined" sx={{ my: 1 }}>
+          <List dense sx={{ p: 0 }}>
+            {blog.comments.map((comment, i, arr) => (
+              <ListItem key={comment.id} divider={i < arr.length - 1}>
+                <ListItemText primary={comment.content} />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      )}
       <form onSubmit={handleSubmit}>
-        <input name="comment" />
-        <button type="submit">add comment</button>
+        <TextField name="comment" rows={3} multiline fullWidth />
+        <Button type="submit" variant="contained" fullWidth color="success">
+          add comment
+        </Button>
       </form>
-      <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
-      </ul>
-    </>
+    </Box>
   )
 }
 

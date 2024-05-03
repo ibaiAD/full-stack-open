@@ -2,6 +2,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { likeBlog } from '../reducers/blogReducer'
 import BlogComments from './BlogComments'
+import { Box, IconButton, Link, Typography } from '@mui/material'
+import { FavoriteBorder } from '@mui/icons-material'
 
 const BlogInfo = () => {
   const dispatch = useDispatch()
@@ -24,15 +26,35 @@ const BlogInfo = () => {
 
   return (
     <>
-      <h2>
-        {blog.title} {blog.author}
-      </h2>
-      <a href={blog.url}>{blog.url}</a>
-      <div>
-        <span>{blog.likes} likes</span>
-        <button onClick={handleLike}>like</button>
-      </div>
-      <div>added by {blog?.user?.name}</div>
+      <Typography variant="h5" component="h3">
+        {blog.title} - {blog.author}
+      </Typography>
+      <Link href={blog.url} variant="body1">
+        {blog.url}
+      </Link>
+      <Box sx={{ my: 1 }}>
+        <Typography component="span" variant="body1">
+          Likes:
+        </Typography>
+        <IconButton aria-label="like" color="error" onClick={handleLike}>
+          <Typography component="span" variant="body1">
+            {blog.likes}
+          </Typography>
+          <FavoriteBorder />
+        </IconButton>
+      </Box>
+      <Box>
+        <Typography
+          component="span"
+          variant="body2"
+          sx={{ fontWeight: 'bold', mr: 1 }}
+        >
+          added by:
+        </Typography>
+        <Typography component="span" variant="body1">
+          {blog?.user?.name}
+        </Typography>
+      </Box>
       <BlogComments />
     </>
   )
